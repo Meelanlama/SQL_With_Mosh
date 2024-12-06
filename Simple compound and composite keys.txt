@@ -1,0 +1,43 @@
+1. Simple Key
+What it is: A key made up of just one attribute (column) that uniquely identifies each row in a table.
+Example:
+Table: Students
+StudentID	Name	Class
+101	Alice	10A
+102	Bob	10B
+103	Charlie	10A
+StudentID is the simple key because it uniquely identifies each student.
+
+2. Compound Key
+What it is: A key that uses two or more attributes (columns) together to uniquely identify a record.
+Example:
+Table: StudentEnrollments (for students in courses)
+StudentID	CourseID	EnrollmentDate
+101	ENG101	2024-01-10
+102	ENG101	2024-01-12
+101	MATH102	2024-01-11
+Here:
+StudentID alone isn’t unique because one student can enroll in multiple courses.
+CourseID alone isn’t unique because multiple students can take the same course.
+Together, StudentID and CourseID form a compound key, uniquely identifying each record.
+
+3. Composite Key
+What it is: Similar to a compound key, a composite key uses two or more attributes to uniquely identify a record. It’s often used in relationships involving foreign keys.
+Example:
+Table: OrderDetails
+OrderID	ProductID	Quantity
+5001	P1001	2
+5001	P1002	5
+5002	P1001	3
+Here:
+OrderID refers to a specific order.
+ProductID refers to a specific product in that order.
+Together, OrderID and ProductID form a composite key to uniquely identify each line item in the order.
+
+Quick Comparison:
+Type	Definition	Example
+Simple Key	One column uniquely identifies the row.	StudentID in a Students table.
+Compound Key	Two or more columns ensure uniqueness.	StudentID + CourseID in Enrollments.
+Composite Key	Two or more columns, often involving relationships, ensure uniqueness.	OrderID + ProductID in OrderDetails.
+
+This classification helps you design tables that ensure each record can be uniquely identified, preventing duplicate or ambiguous data.

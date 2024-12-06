@@ -1,0 +1,96 @@
+Triggers in SQL: A Comprehensive Overview
+What is a Trigger?
+A trigger in SQL is a special type of stored procedure that is automatically executed (or "triggered") in response to specific events occurring in the database. Triggers are primarily used to enforce business rules, maintain data integrity, or automatically log changes in the database.
+
+Key Components of Triggers
+Event: The action that causes the trigger to execute. Common events include:
+
+INSERT: Triggered when a new record is inserted into a table.
+UPDATE: Triggered when a record in a table is updated.
+DELETE: Triggered when a record is deleted from a table.
+Timing: Specifies whether the trigger is executed before or after the event:
+
+BEFORE: The trigger is executed before the event occurs.
+AFTER: The trigger is executed after the event occurs.
+Scope: The table to which the trigger is attached. Each trigger is associated with a specific table.
+
+Action: The SQL statements that are executed when the trigger is fired.
+
+Trigger Syntax
+Here is a generic syntax for creating a trigger:
+
+CREATE TRIGGER trigger_name
+{BEFORE | AFTER} {INSERT | UPDATE | DELETE}
+ON table_name
+FOR EACH ROW
+BEGIN
+   -- SQL statements to execute
+END;
+Example: Trigger Scenarios
+
+1. Log Changes on Insert
+When a new record is added to a table, a trigger can log this action in a separate table.
+
+-- Create a trigger to log inserts
+CREATE TRIGGER after_insert_log
+AFTER INSERT ON employees
+FOR EACH ROW
+BEGIN
+   INSERT INTO audit_log (action, table_name, action_time)
+   VALUES ('INSERT', 'employees', NOW());
+END;
+
+2. Enforce Business Rules on Update
+If salary updates are not allowed to exceed 10% of the current salary, a trigger can enforce this rule.
+
+-- Create a trigger to validate salary updates
+CREATE TRIGGER before_salary_update
+BEFORE UPDATE ON employees
+FOR EACH ROW
+BEGIN
+   IF NEW.salary > OLD.salary * 1.1 THEN
+      SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'Salary increase exceeds 10% limit';
+   END IF;
+END;
+
+3. Prevent Deletions
+Prevent accidental deletions by canceling a DELETE operation.
+
+-- Create a trigger to prevent deletions
+CREATE TRIGGER before_delete
+BEFORE DELETE ON employees
+FOR EACH ROW
+BEGIN
+   SIGNAL SQLSTATE '45000'
+   SET MESSAGE_TEXT = 'Deleting records is not allowed';
+END;
+
+Advantages of Triggers
+Automatic Execution: Triggers execute automatically, reducing manual intervention.
+Consistency: Enforces data integrity and consistency across the database.
+Centralized Logic: Business rules and validations can be centralized within triggers instead of being scattered across applications.
+Audit and Logging: Automatically logs changes for auditing purposes.
+
+Disadvantages of Triggers
+Complex Debugging: Debugging triggers can be challenging since they execute automatically in the background.
+Performance Overhead: Poorly written triggers can slow down database performance.
+Hidden Behavior: Trigger logic is hidden from the application, which can lead to unexpected outcomes.
+
+Trigger Restrictions
+Triggers cannot call transactions (COMMIT, ROLLBACK) explicitly.
+Triggers are table-specific and cannot be associated with views.
+Each table can have multiple triggers, but their interactions need careful handling to avoid unexpected behavior.
+
+Use Cases of Triggers
+Auditing: Logging changes made to a database.
+Enforcing Rules: Preventing invalid data operations.
+Automatic Calculations: Automatically updating derived fields.
+Cascading Actions: Triggering changes in related tables (e.g., cascading deletes).
+Triggers, when used effectively, enhance the robustness and integrity of a database system. However, their usage should be well-documented and optimized to avoid pitfalls like hidden dependencies and performance bottlenecks.
+
+
+
+
+
+

@@ -1,0 +1,132 @@
+SQL joins are used to combine rows from two or more tables based on a related column between them. Here's a breakdown of the main types of SQL joins with examples to help you understand how they work:
+
+Example Tables
+Table 1: Customers
+CustomerID	CustomerName
+1		John
+2		Anna
+3		Mike
+
+Table 2: Orders
+OrderID	CustomerID	Product
+101	1		Laptop
+102	2		Phone
+103	4		Tablet
+
+
+1.INNER JOIN:
+An INNER JOIN returns records that have matching values in both tables. It only includes rows where there is a match in both tables.
+
+SELECT Customers.CustomersID, Customers.CustomerName, Orders.Product
+FROM Customers
+INNER JOIN Orders ON Customers.CustomerID = Orders.CustomerID;
+
+Here, only rows with matching CustomerID values in both tables are returned. "Mike" and the "Tablet" order aren’t included because they don't match.
+
+Result:
+
+CustomerID	CustomerName	Product
+1		John		Laptop
+2		Anna		Phone
+
+2. LEFT JOIN:
+A LEFT JOIN returns all records from the left table (first table listed), and the matched records from the right table. If there is no match, NULL values are returned for columns from the right table.
+
+SELECT Customers.CustomersID, Customers.CustomerName, Orders.Product
+FROM Customers
+LEFT JOIN Orders ON Customers.CustomerID = Orders.CustomerID;
+
+Result:
+
+CustomerID	CustomerName	Product
+1		John		Laptop
+2		Anna		Phone
+3		Mike		NULL
+
+"Mike" appears in the result even though he doesn’t have an order. His Product field shows NULL because there is no corresponding entry in the Orders table.
+
+
+3. RIGHT JOIN:
+A RIGHT JOIN returns all records from the right table (second table listed), and the matched records from the left table. If there is no match, NULL values are returned for columns from the left table.
+
+SELECT Customers.CustomerID, Customers.CustomerName, Orders.Product
+FROM Customers
+RIGHT JOIN Orders ON Customers.CustomerID = Orders.CustomerID;
+
+Result:
+
+CustomerID	CustomerName	Product
+1		John		Laptop
+2		Anna		Phone
+NULL		NULL	        Tablet
+
+The "Tablet" order appears in the result, even though it doesn’t have a matching CustomerID in the Customers table. CustomerID and CustomerName fields show NULL because there is no corresponding entry in Customers.
+
+4. FULL JOIN (or FULL OUTER JOIN)
+A FULL JOIN returns all records when there is a match in either the left or right table. If there is no match, the result will have NULLs in the missing side.
+
+SELECT Customers.CustomerID, Customers.CustomerName, Orders.Product
+FROM Customers
+FULL OUTER JOIN Orders ON Customers.CustomerID = Orders.CustomerID;
+
+Result:
+
+CustomerID	CustomerName	Product
+1		John		Laptop
+2		Anna		Phone
+3		Mike		NULL
+NULL		NULL		Tablet
+Both "Mike" and the "Tablet" order are included, even though they don’t have corresponding entries in the other table. This join gives a complete view of both tables.
+
+5. CROSS JOIN
+
+A CROSS JOIN returns the Cartesian product of the two tables, meaning it combines all rows from the first table with all rows from the second table. It’s rarely used because it produces a large number of results when the tables have many rows.
+
+SELECT Customers.CustomerID, Customers.CustomerName, Orders.Product
+FROM Customers
+CROSS JOIN Orders;
+
+All combinations of CustomerID, CustomerName, and Product are returned.
+
+6. SELF JOIN
+A SELF JOIN is used to join a table with itself. This can be useful for finding relationships within a single table, such as employees who manage other employees.
+
+Example Table
+Table: Employees
+
+EmployeeID	EmployeeName	ManagerID
+1		John		NULL
+2		Anna		1
+3		Mike		1
+4		Sara		2
+
+SELECT A.EmployeeName AS Employee, B.EmployeeName AS Manager
+FROM Employees A
+LEFT JOIN Employees B ON A.ManagerID = B.EmployeeID;
+
+Result:
+
+Employee	Manager
+John		NULL
+Anna		John
+Mike		John
+Sara		Anna
+This join finds each employee’s manager by joining the Employees table to itself.
+
+Summary Table
+Join Type	Description
+INNER JOIN	Returns only matching rows in both tables.
+
+LEFT JOIN	Returns all rows from the left table and matched rows from the right table; unmatched right rows are NULL.
+
+RIGHT JOIN	Returns all rows from the right table and matched rows from the left table; unmatched left rows are NULL.
+
+FULL JOIN	Returns all rows when there is a match in either table; unmatched rows in either table are NULL.
+
+CROSS JOIN	Returns the Cartesian product of both tables (all combinations of rows).
+
+SELF JOIN	Joins a table with itself to find relationships within the same table.
+
+
+
+
